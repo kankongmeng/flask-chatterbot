@@ -2,13 +2,22 @@ from flask import Flask, render_template, request
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
 
+import os
+
+try:
+    os.remove("db.sqlite3")
+except:
+    print("no db file")
+
 app = Flask(__name__)
 
 english_bot = ChatBot("Chatterbot", storage_adapter="chatterbot.storage.SQLStorageAdapter")
 
 english_bot.set_trainer(ChatterBotCorpusTrainer)
-english_bot.train("chatterbot.corpus.english")
-
+english_bot.train(
+    "chatterbot.corpus.english",
+    "./data/"
+    )
 
 @app.route("/")
 def home():
